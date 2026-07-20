@@ -6,4 +6,11 @@ class InvalidAudienceAttack(PlaceholderAttack):
     NAME = 'Invalid Audience'
     CATEGORY = 'Claims'
     SEVERITY = 'Medium'
-    DESCRIPTION = 'Placeholder for Invalid Audience. Payload logic is intentionally not implemented yet.'
+    DESCRIPTION = 'Replace the aud claim with invalid-audience.'
+
+    def mutate(self, jwt):
+        header = self.mutations.clone_header(jwt)
+        payload = self.mutations.clone_payload(jwt)
+        self.mutations.replace_claim(payload, 'aud', 'invalid-audience')
+        token = self.mutations.rebuild_token(header, payload, jwt.signature)
+        return token, header, payload, 'Replaced aud with invalid-audience.', 'aud=invalid-audience'

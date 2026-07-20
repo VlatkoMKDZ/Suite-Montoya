@@ -135,8 +135,9 @@ class TokenAttackAdvisorFrame(JFrame):
         if not selected:
             return
         result = selected[0]
-        self.details.setText('%s\n\n%s\n\nExpected: %s' % (
-            result.attack.get_name(), result.attack.get_description(), result.attack.expected_result()))
+        self.details.setText('%s\n\n%s\n\nMutation: %s\nPayload Used: %s\nExpected: %s' % (
+            result.attack.get_name(), result.attack.get_description(),
+            result.mutation_summary, result.payload_used, result.attack.expected_result()))
         self.generated_request.setText(result.request or '')
         self.response.setText(bytes_to_string(result.response) if result.response else '')
         self.diff.setText(result.diff or '')

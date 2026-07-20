@@ -3,6 +3,11 @@ import base64
 import json
 import time
 
+try:
+    unicode
+except NameError:
+    unicode = str
+
 
 def now_ms():
     return int(time.time() * 1000)
@@ -34,7 +39,10 @@ def b64url_decode(value):
 def b64url_encode(value):
     if isinstance(value, unicode):
         value = value.encode('utf-8')
-    return base64.urlsafe_b64encode(value).rstrip('=')
+    encoded = base64.urlsafe_b64encode(value).rstrip(b'=')
+    if not isinstance(encoded, str):
+        encoded = encoded.decode('ascii')
+    return encoded
 
 
 def json_dumps(value):

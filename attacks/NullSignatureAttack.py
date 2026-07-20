@@ -6,4 +6,10 @@ class NullSignatureAttack(PlaceholderAttack):
     NAME = 'Null Signature'
     CATEGORY = 'Signature'
     SEVERITY = 'Medium'
-    DESCRIPTION = 'Placeholder for Null Signature. Payload logic is intentionally not implemented yet.'
+    DESCRIPTION = 'Keep the algorithm and replace the signature with an empty value.'
+
+    def mutate(self, jwt):
+        header = self.mutations.clone_header(jwt)
+        payload = self.mutations.clone_payload(jwt)
+        token = self.mutations.rebuild_token(header, payload, self.mutations.replace_signature(''))
+        return token, header, payload, 'Kept JWT header and payload, replaced signature with empty value.', 'empty-signature'
